@@ -1,0 +1,133 @@
+.container{
+    width: fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.containerMX{
+    max-width: 300px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.containerMX500{
+    max-width: 400px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title{
+    font-size: 2em;
+    padding: 10px 15px;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.signInContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.signInItem{
+    padding: 10px 15px;
+}
+
+.signInItem input{
+    width: 100%;
+    padding: 10px 15px;
+    outline: none;
+    background-color: #242424;
+    border: 1px solid rgb(51, 51, 51);
+    border-radius: 5px;
+    color: #FFFFFF;
+    transition: 0.3s all ease-in-out;
+}
+
+.signInItem input:focus{
+    outline:none;
+    border:1px solid #666666;
+}
+
+.signInItem button{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #FA6163;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.signInPassword{
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.signInItemPassword{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #FFFFFF;
+    font-size: 1.5em;
+    user-select: none;
+    cursor: pointer;
+}
+
+.signInError{
+    color: #FA6163;
+    text-align: center;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signInSuccess{
+    color: #28a745;
+    text-align: center;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signInItem a{
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.signInItem span{
+    color: #666666;
+}
+
+@media screen and (max-width: 313px) {
+    .signInItem a {
+        flex-direction: column;
+    }
+}
+
+.SignInItemContainer{
+    display: flex;
+    width: 100%;
+}
+
+.signInItemW100{
+    width: 100%;
+}

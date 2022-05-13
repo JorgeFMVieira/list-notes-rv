@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "7901a49d-d5f5-4995-b2e6-88a19774cee2",
+		"name": "ProductsRV_POSTGRES",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ricardojorge123@live.com.pt\",\r\n    \"password\": \"yourPassword1234@\",\r\n    \"first_name\": \"firsName\",\r\n    \"last_name\": \"LastName\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://productslistrv.herokuapp.com/api/register",
+							"protocol": "https",
+							"host": [
+								"productslistrv",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"youremail@example.com\",\r\n    \"password\": \"yourPassword1234@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/login",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ForgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"jorgevieira1221@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://productslistrv.herokuapp.com/api/ForgotPassword",
+							"protocol": "https",
+							"host": [
+								"productslistrv",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"ForgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"1234@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://productslistrv.herokuapp.com/api/ResetPassword?token=lindo",
+							"protocol": "https",
+							"host": [
+								"productslistrv",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"ResetPassword"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "lindo"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "GetAllProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3005/api/v1/products/getProducts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"getProducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"productTitle\",\r\n    \"description\": \"productsDescription\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/products",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "BACKEND_URL/api/products/getProduct/3",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"products",
+								"getProduct",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditProduct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"productTitle\",\r\n    \"description\": \"productDescription\",\r\n    \"data\": \"01/01/0001\",\r\n    \"done\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/products/edit/2",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"products",
+								"edit",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProduct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3005/api/v1/products/delete/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"delete",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
