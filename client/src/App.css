@@ -6,6 +6,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
+a{
+    text-decoration: none;
+}
+
 body{
     background-color: #242424;
+}
+
+.mainContainer{
+    position: relative;
 }

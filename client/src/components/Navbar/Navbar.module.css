@@ -1,0 +1,35 @@
+.navbar{
+    width: 100%;
+    background-color: #202020;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    width: fit-content;
+    font-size: 1.5em;
+    white-space: nowrap;
+    margin-left: 15px;
+}
+
+.navlinks{
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.navlink a{
+    padding: 20px 15px;
+    display: flex;
+    color: #FFFFFF;
+}
+
+.activeLink a{
+    color: #FA6163;
+    transition: 0.3s all ease-in-out;
+}
+
+.userProfile{
+    font-size: 2em;
+}
