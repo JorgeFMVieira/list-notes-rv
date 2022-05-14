@@ -12,8 +12,5 @@ a{
 
 body{
     background-color: #242424;
-}
-
-.mainContainer{
-    position: relative;
+    min-height: 100vh;
 }

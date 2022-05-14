@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
+import Profile from "./components/Profile/Profile";
 import { useAuth } from './context/AuthContext';
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from './pages/Auth/Login';
@@ -29,6 +30,7 @@ function App() {
                 {isUserLoggedIn && currentUser !== null ?
                     <>
                         <Route path="/" element={<Products />} />
+                        <Route path="/profile" element={<Profile />} />
                     </>
                     :
                     <>

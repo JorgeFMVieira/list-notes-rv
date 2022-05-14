@@ -1,0 +1,58 @@
+.profile{
+    width: fit-content;
+    margin: 5% 0 0 5%;
+    display: flex;
+}
+
+.profileButtons{
+    display: flex;
+    flex-direction: column;
+}
+
+.profileButtons button{
+    width: 250px;
+    height: 40px;
+    outline: none;
+    border: none;
+    margin: 0 0 5px 0;
+    text-align: left;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: 0.3s all ease-in-out;
+}
+
+.profileButtons .active{
+    background-color: #FA6163;
+    color: #FFFFFF;
+}
+
+.profileButtons .btnDisabled{
+    color: #FA6163;
+    background-color: transparent;
+}
+
+.profileButtons .btnDisabled:hover{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.profileInfo{
+    margin-left: 50px;
+}
+
+@media screen and (max-width: 1080px) {
+    .profile{
+        display: flex;
+        flex-direction: column;
+        margin: 5%;
+    }
+
+    .profileInfo{
+        margin: 0;
+    }
+
+    .profileButtons button{
+        width: 100%;
+    }
+}

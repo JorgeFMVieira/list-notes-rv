@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
 .navbar{
     width: 100%;
     background-color: #202020;
@@ -6,11 +8,14 @@
     align-items: center;
 }
 
-.logo{
+.logo a{
     width: fit-content;
     font-size: 1.5em;
     white-space: nowrap;
     margin-left: 15px;
+    color: #FA6163;
+    font-family: 'Russo One', sans-serif;  
+    text-decoration: none; 
 }
 
 .navlinks{
@@ -19,17 +24,85 @@
     align-items: center;
 }
 
-.navlink a{
+.navlink .navbarItem{
+    transition: 0.3s all ease-in-out;
+    cursor: pointer;
+}
+
+.navlink .navbarItem:hover{
+    color: #FA6163;
+}
+
+.navlink .navbarItem{
     padding: 20px 15px;
     display: flex;
     color: #FFFFFF;
 }
 
-.activeLink a{
+.activeLink .navbarItem{
     color: #FA6163;
     transition: 0.3s all ease-in-out;
 }
 
 .userProfile{
     font-size: 2em;
+}
+
+.navlinkProfile{
+    position: relative;
+}
+
+.profile{
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    width: fit-content;
+    background-color: #1a1a1a;
+    z-index: 9999;
+}
+
+.profileItem{
+    border-top: 1px solid #242424;
+    text-align: left;
+}
+
+.profileItem:first-child{
+    border-top: none;
+}
+
+.profileItem .profileOption:hover{
+    color: #FA6163;
+}
+
+.profileOption{
+    cursor: pointer;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+.profileInfo{
+    display: flex;
+    color: #FFFFFF;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+.profileLink{
+    width: 100%;
+    padding: 10px 30px 10px 15px;
+    font-size: 0.96em;
+    transition: 0.3s all ease-in-out;
+    color: #FFFFFF;
+}
+
+.fadeIn{
+    transition: all 0.2s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+.fadeOut{
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
 }
