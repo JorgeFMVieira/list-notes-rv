@@ -1,26 +1,24 @@
 .profile{
-    width: fit-content;
-    margin: 5% 0 0 5%;
+    margin: 5%;
     display: flex;
 }
 
 .profileButtons{
     display: flex;
     flex-direction: column;
+    width: 250px;
 }
 
 .profileButtons button{
-    width: 250px;
-    height: 40px;
+    text-align: left;
     outline: none;
     border: none;
-    margin: 0 0 5px 0;
-    text-align: left;
-    padding: 10px;
     border-radius: 5px;
-    font-size: 1.1em;
-    cursor: pointer;
+    padding: 10px;
     transition: 0.3s all ease-in-out;
+    margin: 5px 5px 5px 0px;
+    font-size: 1em;
+    cursor: pointer;
 }
 
 .profileButtons .active{
@@ -29,30 +27,28 @@
 }
 
 .profileButtons .btnDisabled{
-    color: #FA6163;
     background-color: transparent;
-}
-
-.profileButtons .btnDisabled:hover{
-    background-color: rgba(0,0,0,0.1);
+    color: #FA6163;
 }
 
 .profileInfo{
-    margin-left: 50px;
+    margin-left: 5%;
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    transition: 0.3s all ease-in-out;
 }
 
-@media screen and (max-width: 1080px) {
+@media screen and (max-width: 700px) {
     .profile{
-        display: flex;
         flex-direction: column;
-        margin: 5%;
     }
 
     .profileInfo{
-        margin: 0;
+        margin-left: 0;
     }
 
-    .profileButtons button{
+    .profileButtons{
         width: 100%;
-    }
+    }  
 }

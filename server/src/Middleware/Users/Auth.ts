@@ -8,14 +8,15 @@ export default (req: any, res: any, next: any) => {
     if (!token) {
         return res.json({
             success: false,
+            message: "Inicie Sessão.",
         });
     }
     try {
-        if(token){
-            const decoded = jwt.verify(token, process.env.TOKEN_KEY as string);
-            req.user = decoded;
-            res.status(200).json({
-                user: req.user,	
+        const decoded = jwt.verify(token, process.env.TOKEN_KEY as string);
+        if(!decoded){
+            res.json({
+                success: false,
+                message: "Token inválido.",
             });
         }
     } catch (err) {

@@ -1,41 +1,113 @@
-import React, { useState } from 'react'
-import styles from './PasswordInfo.module.css'
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import React, { useEffect, useState } from 'react'
+import styles from '../Info.module.css'
+import { AiFillEye, AiOutlineCheck, AiOutlineEyeInvisible, AiOutlineWarning } from 'react-icons/ai'
+import { AuthService } from '../../../services/Auth/AuthService';
+import { CurrentPassword } from '../../../models/Auth/CurrentPassword';
+import { UpdateUser } from '../../../models/Auth/UpdateUser';
+import { GetUser } from '../../../models/Auth/GetUser';
+import { Get } from '../../../models/Auth/Get';
+import { useAuth } from '../../../context/AuthContext';
 
 const PasswordInfo = () => {
 
+    const { isUserLoggedIn, currentUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
+    const [showPassword3, setShowPassword3] = useState(false);
+    const [passwordInfo, setPasswordInfo] = useState<CurrentPassword>(new CurrentPassword());
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
+    const [user, setUser] = useState<GetUser>(new GetUser());
 
+    const service: AuthService = new AuthService();
+
+    const ChangePassword = async () => {
+        var data: CurrentPassword = {
+            ...passwordInfo,
+        }
+        await service.ChangeCurrentPassword(data)
+            .then(response => {
+                if (response.success === false) {
+                    setError(true);
+                    setErrorMsg(response.message);
+                    return;
+                }
+
+                if (response.success === true) {
+                    setSuccess(true);
+                    setSuccessMsg(response.message);
+                    setTimeout(() => {
+                        setSuccess(false);
+                    }, 3500);
+                }
+            })
+            .catch(err => {
+                setError(true);
+                setErrorMsg(err);
+            });
+    }
+
+    useEffect(() => {
+        var data: Get = {
+            token: currentUser?.token
+        }
+        service.GetUserInfo(data)
+            .then(response => {
+                setUser(response.obj);
+            })
+            .catch(err => {
+                setError(true);
+                setErrorMsg(err);
+            });
+        setPasswordInfo({ ...passwordInfo, id: user.id });
+    }, [currentUser, user]);
 
     return (
-        <div className={styles.profileInfo}>
-            <div className={styles.profileTitle}>
-                <span>Alterar Palavra-Passe</span>
+        <div className={styles.profileContainer}>
+            <div className={styles.profileTitle}>Alterar Palavra-Passe</div>
+            <div className={styles.profileItem}>
+                <label htmlFor="currentPassword">Palavra-Passe Atual</label>
+                <div className={styles.passwordContainer}>
+                    <input type={`${showPassword3 ? 'text' : 'password'}`} name='currentPassword' id='currentPassword' placeholder='Palavra-Passe Atual' onChange={(e) => { setPasswordInfo({ ...passwordInfo, currentPassword: e.target.value }); setError(false) }} />
+                    <div className={styles.passwordIcon} onClick={() => setShowPassword3(!showPassword3)}>
+                        {showPassword3 ? <AiOutlineEyeInvisible /> : <AiFillEye />}
+                    </div>
+                </div>
             </div>
-            <div className={styles.profileContent}>
-              <div className={styles.profileItem}>
-                  <label htmlFor="currentPassword">Palavra-Passe Atual</label>
-                  <div className={`${styles.passwordContainer} ${styles.defaultInput}`}>
-                      <input type="text" name='currentPassword' id='currentPassword' placeholder='Palavra-Passe Atual' autoComplete='off' />
-                  </div>
-              </div>
-              <div className={styles.profileItemDouble}>
-                  <div className={styles.profileItem}>
-                      <label htmlFor="password">Nova Palavra-Passe</label>
-                      <div className={styles.passwordContainer}>
-                          <input type={`${showPassword ? 'text' : 'password'}`} name='password' id='password' placeholder='Nova Palavra-Passe' autoComplete='off' />
-                          {showPassword ? <AiOutlineEyeInvisible onClick={() => setShowPassword(!showPassword)} className={styles.iconPassword} /> : <AiOutlineEye onClick={() => setShowPassword(!showPassword)} className={styles.iconPassword} />}
-                      </div>
-                  </div>
-                  <div className={styles.profileItem}>
-                      <label htmlFor="last_name">Confirmar Nova Palavra-Passe</label>
-                      <div className={styles.passwordContainer}>
-                          <input type={`${showPassword2 ? 'text' : 'password'}`} name='last_name' id='last_name' placeholder='Confirmar Nova Palavra-Passe' autoComplete='off' />
-                          {showPassword2 ? <AiOutlineEyeInvisible className={styles.iconPassword} onClick={() => setShowPassword2(!showPassword2)} /> : <AiOutlineEye className={styles.iconPassword} onClick={() => setShowPassword2(!showPassword2)} />}
-                      </div>
-                  </div>
-              </div>
+            <div className={styles.profileItemDouble}>
+                <div className={styles.profileItem}>
+                    <label htmlFor="newPassword">Nova Palavra-Passe</label>
+                    <div className={styles.passwordContainer}>
+                        <input type={`${showPassword ? 'text' : 'password'}`} name='newPassword' id='newPassword' placeholder='Nova Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, password: e.target.value }); setError(false) }} />
+                        <div className={styles.passwordIcon} onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <AiOutlineEyeInvisible /> : <AiFillEye />}
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.profileItem}>
+                    <label htmlFor="newPassword2">Confirme a Palavra-Passe</label>
+                    <div className={styles.passwordContainer}>
+                        <input type={`${showPassword2 ? 'text' : 'password'}`} name='newPassword2' id='newPassword2' placeholder='Confirme a Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, confirmPassword: e.target.value }); setError(false) }} />
+                        <div className={styles.passwordIcon} onClick={() => setShowPassword2(!showPassword2)}>
+                            {showPassword2 ? <AiOutlineEyeInvisible /> : <AiFillEye />}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {error ?
+                <div className={styles.profileItem}>
+                    <div className={styles.profileError}><AiOutlineWarning style={{ fontSize: '1.5em' }} />&nbsp;{errorMsg}</div>
+                </div>
+                : null}
+            {success ?
+                <div className={styles.profileItem}>
+                    <div className={styles.profileSuccess}><AiOutlineCheck style={{ fontSize: '1.5em' }} />&nbsp;{successMsg}</div>
+                </div>
+                : null}
+            <div className={styles.profileItem}>
+                <button onClick={() => ChangePassword()}>Guardar</button>
             </div>
         </div>
     )

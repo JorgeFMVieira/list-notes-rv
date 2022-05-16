@@ -36,7 +36,6 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
         if(user !== null){
             setCurrentUser(localStorage.setItem("user", JSON.stringify(user))!);
-            console.log("User:" + user);
         }
         setIsUserLoggedIn(true);
     }

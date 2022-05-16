@@ -15,4 +15,10 @@ router.post('/ForgotPassword', UserController.ForgotPassword);
 
 router.post('/ResetPassword', UserController.ResetPassword);
 
+router.post("/getUser", UserController.GetUser);
+
+router.post("/updateUser", UserController.UpdateUser);
+
+router.post("/changeCurrentPassword", UserController.ChangeCurrentPassword);
+
 export default router;

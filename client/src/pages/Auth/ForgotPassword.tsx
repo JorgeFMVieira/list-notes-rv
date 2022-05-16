@@ -9,10 +9,9 @@ import { ForgotPasswordDTO } from '../../models/Auth/ForgotPasswordDTO';
 const ForgotPassword = () => {
 
     const service: AuthService = new AuthService();
-    const { setCurrentUser, currentUser } = useAuth();
+    const { currentUser } = useAuth();
     const [user, setUser] = useState<ForgotPasswordDTO>(new ForgotPasswordDTO());
     const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [success, setSuccess] = useState(false);

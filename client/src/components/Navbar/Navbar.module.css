@@ -1,51 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 
 .navbar{
-    width: 100%;
-    background-color: #202020;
-    color: #FFFFFF;
+    height: 60px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    background-color: #202020;
 }
 
-.logo a{
-    width: fit-content;
-    font-size: 1.5em;
-    white-space: nowrap;
-    margin-left: 15px;
+.navbar > .navLogo{
+    font-size: 21px;
+    margin: 15px;
     color: #FA6163;
     font-family: 'Russo One', sans-serif;  
     text-decoration: none; 
 }
 
-.navlinks{
+.navbar > .navItems{
     display: flex;
-    margin-left: auto;
     align-items: center;
 }
 
-.navlink .navbarItem{
-    transition: 0.3s all ease-in-out;
+.navbar > .navItems > .navlinkItem{
+    color: #FFFFFF;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 15px;
+    position: relative;
+    transition: .45s all ease-in-out;
     cursor: pointer;
 }
 
-.navlink .navbarItem:hover{
+.navbar > .navItems > .navlinkItem:hover{
     color: #FA6163;
 }
 
-.navlink .navbarItem{
-    padding: 20px 15px;
-    display: flex;
-    color: #FFFFFF;
+.navbar > .navToggle {
+    display: none;
 }
 
-.activeLink .navbarItem{
-    color: #FA6163;
+.activeLink{
+    color: #FA6163 !important;
     transition: 0.3s all ease-in-out;
 }
 
 .userProfile{
-    font-size: 2em;
+    font-size: 1.7em;
 }
 
 .navlinkProfile{
@@ -105,4 +105,83 @@
     transition: all 0.2s ease-in-out;
     opacity: 0;
     visibility: hidden;
+}
+
+@media screen and (max-width: 700px) {
+    .navbar > .navItems{
+        position: absolute;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #1a1a1a;
+        left: 0;
+        width: 100%;
+        height: max-content;
+        transform: translateY(-100%);
+        transition: all .45s;
+        text-align: center;
+    }
+
+    .navbar > .navItems > .navlinkItem{
+        margin: 35px;
+    }
+
+    .navbar > .navItems > .navlinkItem::before{
+        background-color: transparent;
+    }
+
+    .navbar > .navItems.open{
+        top: 60px;
+        transform: translateY(0);
+    }
+
+    .navbar > .navToggle{
+        display: flex;
+        width: 50px;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .navToggle > .bar{
+        position: relative;
+        width: 32px;
+        height: 2px;
+        background-color: #FFFFFF;
+    }
+
+    .navToggle > .bar::before, .navToggle > .bar::after{
+        content: "";
+        position: absolute;
+        height: 2px;
+        background-color: #FFFFFF;
+        border-radius: 2px;
+        transition: all .45s ease-in-out;
+    }
+
+    .navToggle > .bar::before{
+        width: 25px;
+        transform: translateY(-8px);
+        right: 0;
+    }
+
+    .navToggle > .bar::after{
+        width: 32px;
+        transform: translateY(8px);
+    }
+
+    .navToggle.open > .bar{
+        transform: translateX(-40px);
+        background-color: transparent;
+    }
+
+    .navToggle.open > .bar::before{
+        width: 32px;
+        transform: rotate(45deg) translate(26px, -26px);
+    }
+
+    .navToggle.open > .bar::after{
+        transform: rotate(-45deg) translate(26px, 26px);
+    }
 }

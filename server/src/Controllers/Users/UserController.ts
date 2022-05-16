@@ -124,9 +124,6 @@ const UserLogin = async function (req: any, res: any, next: any) {
 
             return res.json({
                 user: {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    email: user.email,
                     token: user.token,
                 }
             });
@@ -301,11 +298,213 @@ const ResetPassword = async (req: any, res: any) => {
     });
 }
 
+const GetUser = async (req: any, res: any) => {
+    const { token } = req.body;
+
+    if(token === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo do id.",
+            field: "id"
+        });
+    }
+
+    try{
+        const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+        if(tokenDecoded){
+            const getUser = await User.findOne({ _id: tokenDecoded.user_id });
+            if(getUser){
+                return res.json({
+                    success: true,
+                    obj: {
+                        id: getUser._id,
+                        first_name: getUser.first_name,
+                        last_name: getUser.last_name,
+                        email: getUser.email,
+                        token: token,
+                    }
+                });
+            }else{
+                return res.json({
+                    success: false,
+                    message: "Não conseguimos realizar essa operação.",
+                });
+            }
+        }else{
+            return res.json({
+                success: false,
+                message: "Algo inesperado aconteceu. Tente novamente.",
+                field: "all"
+            });
+        }
+    }
+    catch(e){
+        res.json({
+            success: false,
+            message: e
+        });
+    }
+}
+
+const UpdateUser = async (req: any, res: any) => {
+    const { id, email, first_name, last_name } = req.body;
+
+    if(id === ""){
+        return res.json({
+            success: false,
+            message: "Algo inesperado aconteceu.",
+        });
+    }
+
+    if(email === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo do email.",
+            field: "email"
+        });
+    }
+
+    if(first_name === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo do nome.",
+            field: "first_name"
+        });
+    }
+
+    if(last_name === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo do sobrenome.",
+            field: "last_name"
+        });
+    }
+
+    if (!validator.validate(email)) {
+        return res.json({
+            success: false,
+            message: "Introduza um endereço de email válido",
+            field: 'email'
+        });
+    }
+
+    const currentUser = await User.findById({ _id: id });
+
+    if(currentUser === null){
+        return res.json({
+            success: false,
+            message: "Algo inesperado aconteceu.",
+        });
+    }
+
+    const checkEmail = await User.findOne({ email });
+
+    if(checkEmail.email !== currentUser.email){
+        if (checkEmail) {
+            return res.json({
+                success: false,
+                message: "Parece que esse email já está em uso.",
+                field: "email"
+            });
+        }
+    }
+
+    const update = await User.findByIdAndUpdate(
+        { _id: id }, 
+        { 
+            first_name: first_name, 
+            last_name: last_name,
+            email: email
+        }
+    );
+
+    if(update === null){
+        return res.json({
+            success: false,
+            message: "Não conseguimos realizar essa operação.",
+        });
+    }
+
+    return res.json({
+        success: true,
+        message: "Os seus dados foram atualizados com sucesso.",
+    });
+}
+
+const ChangeCurrentPassword = async (req: any, res: any) => {
+    const { id, currentPassword, password, confirmPassword } = req.body;
+
+    if(id === ""){
+        return res.json({
+            success: false,
+            message: "Algo inesperado aconteceu.",
+        });
+    }
+
+    if(currentPassword === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo da palavra-passe atual.",
+        });
+    }
+
+    if(password === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo da nova palavra-passe.",
+        });
+    }
+
+    if(confirmPassword === ""){
+        return res.json({
+            success: false,
+            message: "Preencha o campo da confirmação da nova palavra-passe.",
+        });
+    }
+
+    if(password !== confirmPassword){
+        return res.json({
+            success: false,
+            message: "As palavras-passe não coincidem.",
+        });
+    }
+
+    const user = await User.findById({ _id : id });
+
+    if (user && (await bcrypt.compare(currentPassword, user.password))) {
+        const update = await User.findByIdAndUpdate(
+            { _id: id },
+            { password: await bcrypt.hash(password, 10) }
+        );
+
+        if(update){
+            return res.json({
+                success: true,
+                message: "Palavra-passe alterada com sucesso.",
+            });
+        }else{
+            return res.json({
+                success: false,
+                message: "Não conseguimos realizar essa operação.",
+            });
+        }
+    }else{
+        return res.json({
+            success: false,
+            message: "A palavra-passe atual não coincide com a palavra-passe inserida.",
+        });
+    }
+}
+
 const UserController = {
     UserLogin,
     Register,
     ForgotPassword,
     ResetPassword,
+    GetUser,
+    UpdateUser,
+    ChangeCurrentPassword,
 }
 
 export default UserController;
