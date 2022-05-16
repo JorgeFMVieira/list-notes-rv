@@ -202,6 +202,98 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "CreateNote",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"\",\r\n    \"content\": \"\",\r\n    \"token\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/createNote",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"createNote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListNotes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"\",\r\n    \"search\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/listNotes",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"listNotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateNote",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\": \"\",\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "BACKEND_URL/api/updateNotes?note=6282c3f9b54e3f4def039290",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"updateNotes"
+							],
+							"query": [
+								{
+									"key": "note",
+									"value": "6282c3f9b54e3f4def039290"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
