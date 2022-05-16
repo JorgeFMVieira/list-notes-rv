@@ -78,6 +78,12 @@ const RecoverPassword = () => {
         setPass2(e);
     }
 
+    const handleKeyPress = async (e: any) => {
+        if(e.key === 'Enter'){
+            RecoverPassword();
+        }
+    }
+
     useEffect(() => {
         if (currentUser != null) {
             navigate("/");
@@ -95,7 +101,7 @@ const RecoverPassword = () => {
             <div className={styles.SignInItemContainer}>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
                         <div className={styles.signInPassword}>
-                            <input type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => {setRecover({ ...recover, password: e.target.value });handleInput()}} />
+                            <input onKeyPress={(e) => handleKeyPress(e)} type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => {setRecover({ ...recover, password: e.target.value });handleInput()}} />
                             {showPassword ?
                                 <AiFillEyeInvisible onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />
                                 : <AiFillEye onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />}
@@ -103,7 +109,7 @@ const RecoverPassword = () => {
                     </div>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
                         <div className={styles.signInPassword}>
-                            <input type={showPassword2 ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Confirme a Senha" onChange={(e) => handleChangePassword(e.target.value)} />
+                            <input onKeyPress={(e) => handleKeyPress(e)} type={showPassword2 ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Confirme a Senha" onChange={(e) => handleChangePassword(e.target.value)} />
                             {showPassword2 ?
                                 <AiFillEyeInvisible onClick={() => setShowPassword2(!showPassword2)} className={styles.signInItemPassword} />
                                 : <AiFillEye onClick={() => setShowPassword2(!showPassword2)} className={styles.signInItemPassword} />}

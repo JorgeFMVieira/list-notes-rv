@@ -52,6 +52,12 @@ const ForgotPassword = () => {
         setError(false);
     }
 
+    const handleKeyPress = async (e: any) => {
+        if(e.key === 'Enter'){
+            RecoverPassword();
+        }
+    }
+
     useEffect(() => {
         if (currentUser != null) {
             navigate("/");
@@ -64,7 +70,7 @@ const ForgotPassword = () => {
             <div className={styles.title}>Repor Palavra-Passe</div>
             <div className={styles.signInContainer}>
                 <div className={styles.signInItem}>
-                    <input type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeEmail() }} />
+                    <input onKeyPress={(e) => handleKeyPress(e)} type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeEmail() }} />
                 </div>
                 <div className={styles.signInItem}>
                     {error ?

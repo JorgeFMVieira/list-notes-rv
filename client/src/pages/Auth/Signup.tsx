@@ -6,7 +6,7 @@ import styles from './Auth.module.css';
 import { AiFillEye, AiFillEyeInvisible, AiOutlineWarning } from 'react-icons/ai';
 import { RegisterDTO } from '../../models/Auth/RegisterDTO';
 
-const Login = () => {
+const Register = () => {
 
     const service: AuthService = new AuthService();
     const { setCurrentUser, currentUser } = useAuth();
@@ -25,7 +25,7 @@ const Login = () => {
         }
     }
 
-    const Login = async () => {
+    const Register = async () => {
         const SignUp: RegisterDTO = {
             ...user
         }
@@ -71,6 +71,12 @@ const Login = () => {
         setCPassword(e);
     }
 
+    const handleKeyPress = async (e: any) => {
+        if(e.key === 'Enter'){
+            Register();
+        }
+    }
+
     useEffect(() => {
         checkLoggedIn();
     }, []);
@@ -82,19 +88,19 @@ const Login = () => {
             <div className={styles.signInContainer}>
                 <div className={styles.SignInItemContainer}>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
-                        <input type="text" style={{ border: field === 'first_name' ? '1px solid #FA6163' : '' }} autoComplete='off' name="first_name" placeholder="Nome" onChange={(e) => { setUser({ ...user, first_name: e.target.value }); handleChangeInputs() }} />
+                        <input onKeyPress={(e) => handleKeyPress(e)} type="text" style={{ border: field === 'first_name' ? '1px solid #FA6163' : '' }} autoComplete='off' name="first_name" placeholder="Nome" onChange={(e) => { setUser({ ...user, first_name: e.target.value }); handleChangeInputs() }} />
                     </div>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
-                        <input type="text" style={{ border: field === 'last_name' ? '1px solid #FA6163' : '' }} autoComplete='off' name="last_name" placeholder="Sobrenome" onChange={(e) => { setUser({ ...user, last_name: e.target.value }); handleChangeInputs() }} />
+                        <input onKeyPress={(e) => handleKeyPress(e)} type="text" style={{ border: field === 'last_name' ? '1px solid #FA6163' : '' }} autoComplete='off' name="last_name" placeholder="Sobrenome" onChange={(e) => { setUser({ ...user, last_name: e.target.value }); handleChangeInputs() }} />
                     </div>
                 </div>
                 <div className={styles.signInItem}>
-                    <input type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeInputs() }} />
+                    <input onKeyPress={(e) => handleKeyPress(e)} type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeInputs() }} />
                 </div>
                 <div className={styles.SignInItemContainer}>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
                         <div className={styles.signInPassword}>
-                            <input type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => { setUser({ ...user, password: e.target.value }); handleChangeInputs() }} />
+                            <input onKeyPress={(e) => handleKeyPress(e)} type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => { setUser({ ...user, password: e.target.value }); handleChangeInputs() }} />
                             {showPassword ?
                                 <AiFillEyeInvisible onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />
                                 : <AiFillEye onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />}
@@ -102,7 +108,7 @@ const Login = () => {
                     </div>
                     <div className={`${styles.signInItem} ${styles.signInItemW100}`}>
                         <div className={styles.signInPassword}>
-                            <input type={showPassword2 ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Confirme a Senha" onChange={(e) => handlePass(e.target.value)} />
+                            <input onKeyPress={(e) => handleKeyPress(e)} type={showPassword2 ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Confirme a Senha" onChange={(e) => handlePass(e.target.value)} />
                             {showPassword2 ?
                                 <AiFillEyeInvisible onClick={() => setShowPassword2(!showPassword2)} className={styles.signInItemPassword} />
                                 : <AiFillEye onClick={() => setShowPassword2(!showPassword2)} className={styles.signInItemPassword} />}
@@ -115,7 +121,7 @@ const Login = () => {
                         : null}
                 </div>
                 <div className={styles.signInItem}>
-                    <button onClick={() => Login()} disabled={error}>Registar</button>
+                    <button onClick={() => Register()} disabled={error}>Registar</button>
                 </div>
                 <div className={styles.signInItem}>
                     <Link to="/"><span>Já possui conta?</span>&nbsp;Inicie Sessão</Link>
@@ -125,4 +131,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Register
