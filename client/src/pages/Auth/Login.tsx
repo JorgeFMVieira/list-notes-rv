@@ -17,6 +17,8 @@ const Login = () => {
     const [errorMsg, setErrorMsg] = useState("");
     const [field, setField] = useState("");
 
+
+
     const Login = async () => {
         const Sign: LoginDTO = {
             ...user
@@ -51,6 +53,12 @@ const Login = () => {
         }
     }
 
+    const handleKeyPress = async (e: any) => {
+        if(e.key === 'Enter'){
+            Login();
+        }
+    }
+
     useEffect(() => {
         if(currentUser != null){
             navigate("/");
@@ -63,11 +71,11 @@ const Login = () => {
             <div className={styles.title}>Iniciar Sessão</div>
             <div className={styles.signInContainer}>
                 <div className={styles.signInItem}>
-                    <input type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeEmail() }} />
+                    <input onKeyPress={(e) => handleKeyPress(e)} type="text" style={{ border: field === 'email' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Endereço de Email" onChange={(e) => { setUser({ ...user, email: e.target.value }); handleChangeEmail() }} />
                 </div>
                 <div className={styles.signInItem}>
                     <div className={styles.signInPassword}>
-                        <input type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => { setUser({ ...user, password: e.target.value }); handleChangePassword() }} />
+                        <input onKeyPress={(e) => handleKeyPress(e)} type={showPassword ? 'text' : 'password'} style={{ border: field === 'password' ? '1px solid #FA6163' : '' }} autoComplete='off' name="email" placeholder="Palavra-Passe" onChange={(e) => { setUser({ ...user, password: e.target.value }); handleChangePassword() }} />
                         {showPassword ?
                             <AiFillEyeInvisible onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />
                             : <AiFillEye onClick={() => setShowPassword(!showPassword)} className={styles.signInItemPassword} />}

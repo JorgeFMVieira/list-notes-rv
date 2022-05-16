@@ -481,7 +481,7 @@ const ChangeCurrentPassword = async (req: any, res: any) => {
         if(update){
             return res.json({
                 success: true,
-                message: "Palavra-passe alterada com sucesso.",
+                message: "Palavra-passe foi alterada com sucesso.",
             });
         }else{
             return res.json({

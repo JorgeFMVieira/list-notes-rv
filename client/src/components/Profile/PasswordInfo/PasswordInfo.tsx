@@ -36,6 +36,8 @@ const PasswordInfo = () => {
                 }
 
                 if (response.success === true) {
+                    // Clear all input fields
+                    setPasswordInfo({ ...passwordInfo, currentPassword: "", password: "", confirmPassword: "" });
                     setSuccess(true);
                     setSuccessMsg(response.message);
                     setTimeout(() => {
@@ -70,7 +72,7 @@ const PasswordInfo = () => {
             <div className={styles.profileItem}>
                 <label htmlFor="currentPassword">Palavra-Passe Atual</label>
                 <div className={styles.passwordContainer}>
-                    <input type={`${showPassword3 ? 'text' : 'password'}`} name='currentPassword' id='currentPassword' placeholder='Palavra-Passe Atual' onChange={(e) => { setPasswordInfo({ ...passwordInfo, currentPassword: e.target.value }); setError(false) }} />
+                    <input type={`${showPassword3 ? 'text' : 'password'}`} value={passwordInfo.currentPassword} name='currentPassword' id='currentPassword' placeholder='Palavra-Passe Atual' onChange={(e) => { setPasswordInfo({ ...passwordInfo, currentPassword: e.target.value }); setError(false) }} />
                     <div className={styles.passwordIcon} onClick={() => setShowPassword3(!showPassword3)}>
                         {showPassword3 ? <AiOutlineEyeInvisible /> : <AiFillEye />}
                     </div>
@@ -80,7 +82,7 @@ const PasswordInfo = () => {
                 <div className={styles.profileItem}>
                     <label htmlFor="newPassword">Nova Palavra-Passe</label>
                     <div className={styles.passwordContainer}>
-                        <input type={`${showPassword ? 'text' : 'password'}`} name='newPassword' id='newPassword' placeholder='Nova Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, password: e.target.value }); setError(false) }} />
+                        <input type={`${showPassword ? 'text' : 'password'}`} value={passwordInfo.password} name='newPassword' id='newPassword' placeholder='Nova Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, password: e.target.value }); setError(false) }} />
                         <div className={styles.passwordIcon} onClick={() => setShowPassword(!showPassword)}>
                             {showPassword ? <AiOutlineEyeInvisible /> : <AiFillEye />}
                         </div>
@@ -89,7 +91,7 @@ const PasswordInfo = () => {
                 <div className={styles.profileItem}>
                     <label htmlFor="newPassword2">Confirme a Palavra-Passe</label>
                     <div className={styles.passwordContainer}>
-                        <input type={`${showPassword2 ? 'text' : 'password'}`} name='newPassword2' id='newPassword2' placeholder='Confirme a Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, confirmPassword: e.target.value }); setError(false) }} />
+                        <input type={`${showPassword2 ? 'text' : 'password'}`} value={passwordInfo.confirmPassword} name='newPassword2' id='newPassword2' placeholder='Confirme a Palavra-Passe' onChange={(e) => { setPasswordInfo({ ...passwordInfo, confirmPassword: e.target.value }); setError(false) }} />
                         <div className={styles.passwordIcon} onClick={() => setShowPassword2(!showPassword2)}>
                             {showPassword2 ? <AiOutlineEyeInvisible /> : <AiFillEye />}
                         </div>
