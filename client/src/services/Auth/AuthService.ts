@@ -1,16 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { MessagingHelper } from "../../helpers/MessagingHelper";
-import { AuthDTO } from "../../models/Auth/AuthDTO";
 import { CurrentPassword } from "../../models/Auth/CurrentPassword";
 import { ForgotPasswordDTO } from "../../models/Auth/ForgotPasswordDTO";
+import { Get } from "../../models/Auth/Get";
 import { GetUser } from "../../models/Auth/GetUser";
 import { LoginDTO } from "../../models/Auth/LoginDTO";
 import { RecoverPasswordDTO } from "../../models/Auth/RecoverPasswordDTO";
 import { RegisterDTO } from "../../models/Auth/RegisterDTO";
 import { UpdateUser } from "../../models/Auth/UpdateUser";
 import Api from "../../providers/Api";
-import { APIService } from "../APIService";
 
 
 export class AuthService {
@@ -38,7 +35,7 @@ export class AuthService {
         return response.data;
     }
 
-    GetUserInfo = async (data: any) : Promise<MessagingHelper<GetUser>> => {
+    GetUserInfo = async (data: Get) : Promise<MessagingHelper<GetUser>> => {
         const response = await Api.post("/GetUser", {...data});
         return response.data;
     }

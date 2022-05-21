@@ -110,14 +110,11 @@ const UserLogin = async function (req: any, res: any, next: any) {
         }
 
         const user = await User.findOne({ email });
-
+        // generate token
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign(
                 { user_id: user._id, email },
-                `${process.env.TOKEN_KEY}`,
-                {
-                    expiresIn: "2h",
-                }
+                `${process.env.TOKEN_KEY}`
             );
 
             user.token = token;
@@ -230,7 +227,7 @@ const ResetPassword = async (req: any, res: any) => {
     const token = req.query.token;
     const { password } = req.body;
 
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function(err: any, decoded: any) {
+    jwt.verify(token, `${process.env.TOKEN_KEY}`, function (err: any, decoded: any) {
         if (err) {
             return res.json({
                 tokenValid: false,
@@ -301,20 +298,20 @@ const ResetPassword = async (req: any, res: any) => {
 const GetUser = async (req: any, res: any) => {
     const { token } = req.body;
 
-    if(token === ""){
+    if (token === "") {
         return res.json({
             success: false,
-            message: "Preencha o campo do id.",
+            message: "Preencha o campo do token.",
             field: "id"
         });
     }
 
-    try{
+    try {
         const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
 
-        if(tokenDecoded){
+        if (tokenDecoded) {
             const getUser = await User.findOne({ _id: tokenDecoded.user_id });
-            if(getUser){
+            if (getUser) {
                 return res.json({
                     success: true,
                     obj: {
@@ -325,13 +322,13 @@ const GetUser = async (req: any, res: any) => {
                         token: token,
                     }
                 });
-            }else{
+            } else {
                 return res.json({
                     success: false,
                     message: "Não conseguimos realizar essa operação.",
                 });
             }
-        }else{
+        } else {
             return res.json({
                 success: false,
                 message: "Algo inesperado aconteceu. Tente novamente.",
@@ -339,7 +336,7 @@ const GetUser = async (req: any, res: any) => {
             });
         }
     }
-    catch(e){
+    catch (e) {
         res.json({
             success: false,
             message: e
@@ -350,14 +347,14 @@ const GetUser = async (req: any, res: any) => {
 const UpdateUser = async (req: any, res: any) => {
     const { id, email, first_name, last_name } = req.body;
 
-    if(id === ""){
+    if (id === "") {
         return res.json({
             success: false,
             message: "Algo inesperado aconteceu.",
         });
     }
 
-    if(email === ""){
+    if (email === "") {
         return res.json({
             success: false,
             message: "Preencha o campo do email.",
@@ -365,7 +362,7 @@ const UpdateUser = async (req: any, res: any) => {
         });
     }
 
-    if(first_name === ""){
+    if (first_name === "") {
         return res.json({
             success: false,
             message: "Preencha o campo do nome.",
@@ -373,7 +370,7 @@ const UpdateUser = async (req: any, res: any) => {
         });
     }
 
-    if(last_name === ""){
+    if (last_name === "") {
         return res.json({
             success: false,
             message: "Preencha o campo do sobrenome.",
@@ -391,7 +388,7 @@ const UpdateUser = async (req: any, res: any) => {
 
     const currentUser = await User.findById({ _id: id });
 
-    if(currentUser === null){
+    if (currentUser === null) {
         return res.json({
             success: false,
             message: "Algo inesperado aconteceu.",
@@ -400,7 +397,7 @@ const UpdateUser = async (req: any, res: any) => {
 
     const checkEmail = await User.findOne({ email });
 
-    if(checkEmail.email !== currentUser.email){
+    if (checkEmail.email !== currentUser.email) {
         if (checkEmail) {
             return res.json({
                 success: false,
@@ -411,15 +408,15 @@ const UpdateUser = async (req: any, res: any) => {
     }
 
     const update = await User.findByIdAndUpdate(
-        { _id: id }, 
-        { 
-            first_name: first_name, 
+        { _id: id },
+        {
+            first_name: first_name,
             last_name: last_name,
             email: email
         }
     );
 
-    if(update === null){
+    if (update === null) {
         return res.json({
             success: false,
             message: "Não conseguimos realizar essa operação.",
@@ -435,42 +432,42 @@ const UpdateUser = async (req: any, res: any) => {
 const ChangeCurrentPassword = async (req: any, res: any) => {
     const { id, currentPassword, password, confirmPassword } = req.body;
 
-    if(id === ""){
+    if (id === "") {
         return res.json({
             success: false,
             message: "Algo inesperado aconteceu.",
         });
     }
 
-    if(currentPassword === ""){
+    if (currentPassword === "") {
         return res.json({
             success: false,
             message: "Preencha o campo da palavra-passe atual.",
         });
     }
 
-    if(password === ""){
+    if (password === "") {
         return res.json({
             success: false,
             message: "Preencha o campo da nova palavra-passe.",
         });
     }
 
-    if(confirmPassword === ""){
+    if (confirmPassword === "") {
         return res.json({
             success: false,
             message: "Preencha o campo da confirmação da nova palavra-passe.",
         });
     }
 
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
         return res.json({
             success: false,
             message: "As palavras-passe não coincidem.",
         });
     }
 
-    const user = await User.findById({ _id : id });
+    const user = await User.findById({ _id: id });
 
     if (user && (await bcrypt.compare(currentPassword, user.password))) {
         const update = await User.findByIdAndUpdate(
@@ -478,18 +475,18 @@ const ChangeCurrentPassword = async (req: any, res: any) => {
             { password: await bcrypt.hash(password, 10) }
         );
 
-        if(update){
+        if (update) {
             return res.json({
                 success: true,
                 message: "Palavra-passe foi alterada com sucesso.",
             });
-        }else{
+        } else {
             return res.json({
                 success: false,
                 message: "Não conseguimos realizar essa operação.",
             });
         }
-    }else{
+    } else {
         return res.json({
             success: false,
             message: "A palavra-passe atual não coincide com a palavra-passe inserida.",

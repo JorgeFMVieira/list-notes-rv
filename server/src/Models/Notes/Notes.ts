@@ -6,6 +6,12 @@ const notesSchema = new mongoose.Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
 });
 
+notesSchema.index({
+    "title": "text",
+});
+
 const Notes = mongoose.model("notes", notesSchema);
+
+Notes.createIndexes();
 
 export default Notes;

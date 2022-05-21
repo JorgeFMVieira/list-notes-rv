@@ -24,7 +24,6 @@ const ForgotPassword = () => {
         }
         service.ForgotPassword(Sign)
             .then((response: any) => {
-                console.log(response);
                 if (response.success === false) {
                     setSuccess(false);
                     setError(true);

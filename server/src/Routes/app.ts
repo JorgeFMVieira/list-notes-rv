@@ -4,6 +4,7 @@ import cors from "cors";
 import UserController from '../Controllers/Users/UserController';
 import Auth from '../Middleware/Users/Auth';
 import NotesController from '../Controllers/Notes/NotesController';
+import Notes from '../Models/Notes/Notes';
 const router = express.Router();
 
 dotenv.config();
@@ -28,6 +29,8 @@ router.post("/changeCurrentPassword", UserController.ChangeCurrentPassword);
 router.post("/createNote", NotesController.CreateNote);
 
 router.post("/listNotes", NotesController.ListNotes);
+
+router.post("/detailsNotes", NotesController.DetailsNote);
 
 router.post("/updateNotes", NotesController.UpdateNotes);
 

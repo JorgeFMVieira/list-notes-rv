@@ -29,7 +29,6 @@ const RecoverPassword = () => {
         }
         service.RecoverPassword(Sign)
             .then((response: any) => {
-                console.log(response);
                 if(response.tokenValid === false){
                     navigate("/");
                 }

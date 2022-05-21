@@ -267,13 +267,31 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"token\": \"\",\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
+							"raw": "{\r\n    \"note\": \"\",\r\n    \"token\": \"\",\r\n    \"title\": \"\",\r\n    \"content\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
+						"url": {
+							"raw": "BACKEND_URL/api/updateNotes",
+							"host": [
+								"BACKEND_URL"
+							],
+							"path": [
+								"api",
+								"updateNotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DetailsNote",
+					"request": {
+						"method": "POST",
+						"header": [],
 						"url": {
 							"raw": "BACKEND_URL/api/updateNotes?note=6282c3f9b54e3f4def039290",
 							"host": [

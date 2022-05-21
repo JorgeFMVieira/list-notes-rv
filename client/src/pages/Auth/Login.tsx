@@ -35,7 +35,9 @@ const Login = () => {
                 window.location.reload();
             })
             .catch((err: any) => {
-                console.log(err);
+                setError(true);
+                setErrorMsg(err);
+                setField("all");
             });
     }
 

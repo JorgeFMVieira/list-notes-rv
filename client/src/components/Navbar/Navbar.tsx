@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './Navbar.module.css';
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -7,10 +7,11 @@ import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import { GetUser } from '../../models/Auth/GetUser';
 import { AuthService } from '../../services/Auth/AuthService';
 import { Get } from '../../models/Auth/Get';
+import { Teste } from '../../models/Auth/Teste';
 
 const Navbar = () => {
 
-    const { isUserLoggedIn, currentUser } = useAuth();
+    const { isUserLoggedIn, currentUser, setCurrentUser } = useAuth();
     const [currentLink, setCurrentLink] = useState("/");
     const [openProfile, setOpenProfile] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,7 @@ const Navbar = () => {
     const [fade, setFade] = useState(styles.fadeOut);
     const [user, setUser] = useState<GetUser>(new GetUser());
     const service: AuthService = new AuthService();
+    const navigate = useNavigate();
 
     const pathname = window.location.pathname;
 
@@ -35,16 +37,24 @@ const Navbar = () => {
     }
 
     const GetUserInfo = async () => {
-        var data: Get = {
+        if(currentUser !== null){
+        var data: Teste = {
             token: currentUser?.token
         }
         await service.GetUserInfo(data)
             .then(response => {
-                setUser(response.obj);
+                if(response.success === false){
+                    localStorage.removeItem('user');
+                    setCurrentUser(null);
+                    navigate("/");
+                }else{
+                    setUser(response.obj);
+                }
             })
             .catch(err => {
                 console.log(err);
             });
+        }
     }
 
 

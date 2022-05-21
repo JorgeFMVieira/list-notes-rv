@@ -8,7 +8,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from './pages/Auth/Login';
 import RecoverPassword from "./pages/Auth/RecoverPassword";
 import Signup from "./pages/Auth/Signup";
-import Products from './pages/Products/Products';
+import Notes from './pages/Notes/Notes';
 
 interface PrivateRouteProps {
     requiredRoles: any;
@@ -29,7 +29,7 @@ function App() {
             <Routes>
                 {isUserLoggedIn && currentUser !== null ?
                     <>
-                        <Route path="/" element={<Products />} />
+                        <Route path="/" element={<Notes />} />
                         <Route path="/profile" element={<Profile />} />
                     </>
                     :

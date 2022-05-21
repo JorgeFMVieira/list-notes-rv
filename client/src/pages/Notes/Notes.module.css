@@ -1,0 +1,9 @@
+.notes{
+    margin: 5%;
+    color: #FFFFFF;
+}
+
+.notesList{
+    width: fit-content;
+    display: flex;
+}
