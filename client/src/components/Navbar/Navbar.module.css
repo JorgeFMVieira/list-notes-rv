@@ -50,6 +50,7 @@
 
 .navlinkProfile{
     position: relative;
+    user-select: none;
 }
 
 .profile{

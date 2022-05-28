@@ -10,21 +10,11 @@ import RecoverPassword from "./pages/Auth/RecoverPassword";
 import Signup from "./pages/Auth/Signup";
 import Notes from './pages/Notes/Notes';
 
-interface PrivateRouteProps {
-    requiredRoles: any;
-    loggedIn: boolean,
-    exact: boolean,
-    path: string,
-}
-
-
 function App() {
-
     const { isUserLoggedIn, currentUser } = useAuth();
-    const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="app">
             <Navbar />
             <Routes>
                 {isUserLoggedIn && currentUser !== null ?

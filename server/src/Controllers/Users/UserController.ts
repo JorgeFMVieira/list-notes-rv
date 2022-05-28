@@ -110,18 +110,22 @@ const UserLogin = async function (req: any, res: any, next: any) {
         }
 
         const user = await User.findOne({ email });
-        // generate token
+
         if (user && (await bcrypt.compare(password, user.password))) {
+
             const token = jwt.sign(
                 { user_id: user._id, email },
-                `${process.env.TOKEN_KEY}`
+                `${process.env.TOKEN_KEY}`,
+                {
+                    expiresIn: "24h",
+                }
             );
 
             user.token = token;
 
             return res.json({
                 user: {
-                    token: user.token,
+                    token: user.token
                 }
             });
         }
@@ -186,8 +190,8 @@ const ForgotPassword = async (req: any, res: any) => {
         var url = process.env.FRONTEND_URL + '/recoverPassword/' + token;
 
         const msg = {
-            to: email, // Change to your recipient
-            from: 'jorgevieiratestes@gmail.com', // Change to your verified sender
+            to: email,
+            from: 'jorgevieiratestes@gmail.com',
             subject: 'Sending with SendGrid is Fun',
             text: `Notes RV\nRecebemos um pedido para repor a sua palavra-passe.\nClique no botão em baixo para repor a palavra-passe.\nRecuperar (${url})\n\nSe não foi você que efetuou este pedido, contate a equipa de administração o mais depressa possível, para mantermos a sua conta segura.\n\n♥ POWERED BY JORGE VIEIRA`,
             html: `Notes RV\nRecebemos um pedido para repor a sua palavra-passe.\nClique no botão em baixo para repor a palavra-passe.\nRecuperar (${url})\n\nSe não foi você que efetuou este pedido, contate a equipa de administração o mais depressa possível, para mantermos a sua conta segura.\n\n♥ POWERED BY JORGE VIEIRA`,
@@ -202,7 +206,7 @@ const ForgotPassword = async (req: any, res: any) => {
                 res.send({
                     success: true,
                     message: "Foi enviado um email com as instruções para repor a sua palavra-passe.",
-                    field: "all"
+                    field: "all",
                 });
             })
             .catch(() => {
@@ -244,11 +248,20 @@ const ResetPassword = async (req: any, res: any) => {
 
     const expires = tokenDecoded.date;
 
+    if(expires === null){
+        return res.json({
+            tokenValid: false,
+            success: false,
+            message: "Parece que esse pedido já expirou.",
+            field: "all"
+        });
+    }
+
     if (date > expires) {
         return res.json({
             tokenValid: false,
             success: false,
-            message: "Algo inesperado aconteceu. Tente novamente.",
+            message: "Parece que esse pedido já expirou.",
         });
     }
 
@@ -307,6 +320,19 @@ const GetUser = async (req: any, res: any) => {
     }
 
     try {
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, function (err: any, decoded: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Acesso expirado.",
+                    field: "all"
+                });
+            }
+        });
+
+        const currentDate = new Date();
+
         const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
 
         if (tokenDecoded) {
@@ -320,6 +346,8 @@ const GetUser = async (req: any, res: any) => {
                         last_name: getUser.last_name,
                         email: getUser.email,
                         token: token,
+                        expired: tokenDecoded.exp,
+                        currentDate: currentDate
                     }
                 });
             } else {
@@ -339,7 +367,7 @@ const GetUser = async (req: any, res: any) => {
     catch (e) {
         res.json({
             success: false,
-            message: e
+            message: "Algo inesperado aconteceu. Tente novamente.",
         });
     }
 }
@@ -381,7 +409,7 @@ const UpdateUser = async (req: any, res: any) => {
     if (!validator.validate(email)) {
         return res.json({
             success: false,
-            message: "Introduza um endereço de email válido",
+            message: "Introduza um endereço de email válido.",
             field: 'email'
         });
     }

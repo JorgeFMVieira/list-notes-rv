@@ -31,7 +31,7 @@ const Login = () => {
                     setField(response.field);
                     return;
                 }
-                setCurrentUser(response.user);
+                localStorage.setItem("user", JSON.stringify(response.user));
                 window.location.reload();
             })
             .catch((err: any) => {

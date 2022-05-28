@@ -1,0 +1,11 @@
+.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+    color: #FFFFFF !important;
+}
+
+.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+    background-color: rgba(250, 97, 99, 0.8) !important;
+}
+
+.MuiLinearProgress-barColorPrimary{
+    background-color: #FA6163 !important;
+}

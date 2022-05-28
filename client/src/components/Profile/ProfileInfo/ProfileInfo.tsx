@@ -24,7 +24,12 @@ const ProfileInfo = () => {
             token: currentUser?.token
         }
         await service.GetUserInfo(data)
-            .then(response => {
+            .then((response: any) => {
+                if(response.tokenValid == false){
+                    setError(true);
+                    setErrorMsg("Token is not valid");
+                }
+                console.log(response);
                 setUser(response.obj);
             })
             .catch(err => {

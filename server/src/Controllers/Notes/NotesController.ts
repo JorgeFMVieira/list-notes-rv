@@ -77,16 +77,17 @@ const ListNotes = async (req: any, res: any) => {
     if(!token){
         return res.json({
             success: false,
-            message: "Introduza um utilizador"
+            message: "Introduza um utilizador."
         });
     }
 
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function(err: any, decoded: any) {
+    jwt.verify(token, `${process.env.TOKEN_KEY}`, function (err: any, decoded: any) {
         if (err) {
             return res.json({
                 tokenValid: false,
                 success: false,
-                message: "Acesso expirado."
+                message: "Acesso expirado.",
+                field: "all"
             });
         }
     });
@@ -100,7 +101,7 @@ const ListNotes = async (req: any, res: any) => {
     if(findUser){
         const page = currentPage ? currentPage : 1;
 
-        const limitItems = 2;
+        const limitItems = 30;
         var totalPages = 0;
         var countPage = 0;
         var notas = [];
