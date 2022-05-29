@@ -11,269 +11,302 @@ import mongoose from 'mongoose';
 dotenv.config();
 
 const CreateNote = async (req: any, res: any) => {
-    const { title, content, token } = req.body;
+    try {
+        const { title, content, token } = req.body;
 
-    if(!title){
-        return res.json({
-            success: false,
-            message: "Preencha o campo do título."
-        });
-    }
-
-    if(!token){
-        return res.json({
-            success: false,
-            message: "Introduza um utilizador"
-        });
-    }
-
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function(err: any, decoded: any) {
-        if (err) {
-            return res.json({
-                tokenValid: false,
-                success: false,
-                message: "Acesso expirado.",
-                field: "all"
-            });
-        }
-    });
-
-    const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
-    
-    const user = tokenDecoded.user_id ;
-
-    const findUser = await User.findById({ _id: user });
-
-    if(findUser){
-        const newNote = new Notes({
-            title,
-            content,
-            user 
-        });
-    
-        try {
-            const note = await newNote.save();
-            return res.json({
-                success: true,
-                data: note
-            });
-        } catch (error) {
+        if (!title) {
             return res.json({
                 success: false,
-                message: error
+                message: "Preencha o campo do título."
             });
         }
-    }else{
+
+        if (!token) {
+            return res.json({
+                success: false,
+                message: "Introduza um utilizador"
+            });
+        }
+
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function (err: any, decoded: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Acesso expirado.",
+                    field: "all"
+                });
+            } else {
+
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+                const user = tokenDecoded.user_id;
+
+                const findUser = await User.findById({ _id: user });
+
+                if (findUser) {
+                    const newNote = new Notes({
+                        title,
+                        content,
+                        user
+                    });
+
+                    try {
+                        const note = await newNote.save();
+                        return res.json({
+                            success: true,
+                            data: note
+                        });
+                    } catch (error) {
+                        return res.json({
+                            success: false,
+                            message: error
+                        });
+                    }
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Não encontramos o utilizador."
+                    });
+                }
+            }
+        });
+    }
+    catch {
         return res.json({
             success: false,
-            message: "Não encontramos o utilizador."
+            message: "Algo inesperado aconteceu."
         });
     }
 }
 
 const ListNotes = async (req: any, res: any) => {
-    const { token, search, currentPage } = req.body;
+    try {
+        const { token, search, currentPage } = req.body;
 
-    if(!token){
-        return res.json({
-            success: false,
-            message: "Introduza um utilizador."
-        });
-    }
-
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function (err: any, decoded: any) {
-        if (err) {
+        if (!token) {
             return res.json({
-                tokenValid: false,
                 success: false,
-                message: "Acesso expirado.",
-                field: "all"
+                message: "Introduza um utilizador."
             });
         }
-    });
 
-    const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
-    
-    const user = tokenDecoded.user_id ;
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function async(err: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Parece que o acesso já expirou.",
+                    field: "all"
+                });
+            } else {
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
 
-    const findUser = await User.findById({ _id: user });
+                const user = tokenDecoded.user_id;
 
-    if(findUser){
-        const page = currentPage ? currentPage : 1;
+                const findUser = await User.findById({ _id: user });
 
-        const limitItems = 30;
-        var totalPages = 0;
-        var countPage = 0;
-        var notas = [];
+                if (findUser) {
+                    const page = currentPage ? currentPage : 1;
 
-        // Find Notes and count total items
-        const [notes, count] = await Promise.all([
-            Notes.find({ user: user }).skip((page - 1) * limitItems).limit(limitItems),
-            Notes.countDocuments({ user: user }),
-        ]);
+                    const limitItems = 30;
+                    var totalPages = 0;
+                    var countPage = 0;
+                    var notas = [];
 
-        if(search){
-            const [notes, count] = await Promise.all([
-                Notes.find({ user: user, $text: { $search: search } }).skip((page - 1) * limitItems).limit(limitItems),
-                Notes.countDocuments({ user: user, $text: { $search: search } }),
-            ]);
-            totalPages = Math.ceil(count / limitItems);
-            notas = notes;
-        }else{
-            totalPages = Math.ceil(count / limitItems);
-            notas = notes;
-        }
+                    // Find Notes and count total items
+                    const [notes, count] = await Promise.all([
+                        Notes.find({ user: user }).skip((page - 1) * limitItems).limit(limitItems),
+                        Notes.countDocuments({ user: user }),
+                    ]);
 
-        return res.json({
-            success: true,
-            obj: notas,
-            totalPages: totalPages
+                    if (search) {
+                        const [notes, count] = await Promise.all([
+                            Notes.find({ user: user, $text: { $search: search } }).skip((page - 1) * limitItems).limit(limitItems),
+                            Notes.countDocuments({ user: user, $text: { $search: search } }),
+                        ]);
+                        totalPages = Math.ceil(count / limitItems);
+                        notas = notes;
+                    } else {
+                        totalPages = Math.ceil(count / limitItems);
+                        notas = notes;
+                    }
+
+                    return res.json({
+                        success: true,
+                        obj: notas,
+                        totalPages: totalPages
+                    });
+
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Não encontramos o utilizador."
+                    });
+                }
+            }
         });
-
-    }else{
+    } catch {
         return res.json({
             success: false,
-            message: "Não encontramos o utilizador."
+            message: "Erro ao listar as notas."
         });
     }
 }
 
 const DetailsNote = async (req: any, res: any) => {
-    const note = req.query.note;
-    const { token } = req.body;
+    try {
+        const note = req.query.note;
+        const { token } = req.body;
 
-    if(!token){
-        return res.json({
-            tokenValid: false,
-            success: false,
-            message: "Introduza um utilizador"
-        });
-    }
-
-    if(!note){
-        return res.json({
-            tokenValid: false,
-            success: false,
-            message: "Introduza uma nota"
-        });
-    }
-
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function(err: any, decoded: any) {
-        if (err) {
+        if (!token) {
             return res.json({
                 tokenValid: false,
                 success: false,
-                message: "Acesso expirado."
+                message: "Introduza um utilizador"
             });
         }
-    });
 
-    const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
-    
-    const user = tokenDecoded.user_id ;
-
-    const findUser = await User.findById({ _id: user });
-
-    if(findUser){
-        const findNote = await Notes.findOne({ _id: note, user: user });
-
-        if(findNote){
+        if (!note) {
             return res.json({
-                success: true,
-                obj: findNote
-            });
-        }else{
-            return res.json({
+                tokenValid: false,
                 success: false,
-                message: "Não encontramos a nota."
+                message: "Introduza uma nota"
             });
         }
 
-    }else{
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function (err: any, decoded: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Acesso expirado."
+                });
+            } else {
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+                const user = tokenDecoded.user_id;
+
+                const findUser = await User.findById({ _id: user });
+
+                if (findUser) {
+                    const findNote = await Notes.findOne({ _id: note, user: user });
+
+                    if (findNote) {
+                        return res.json({
+                            success: true,
+                            obj: findNote
+                        });
+                    } else {
+                        return res.json({
+                            success: false,
+                            message: "Não encontramos a nota."
+                        });
+                    }
+
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Não encontramos o utilizador."
+                    });
+                }
+            }
+        });
+    }
+    catch {
         return res.json({
             success: false,
-            message: "Não encontramos o utilizador."
+            message: "Algo inesperado aconteceu."
         });
     }
 }
 
 
 const UpdateNotes = async (req: any, res: any) => {
-    const { note, token, title, content } = req.body;
+    try {
+        const { note, token, title, content } = req.body;
 
-    if(!title){
-        return res.json({
-            success: false,
-            message: "Preencha o campo do título."
-        });
-    }
+        if (!title) {
+            return res.json({
+                success: false,
+                message: "Preencha o campo do título."
+            });
+        }
 
-    if(!token){
-        return res.json({
-            tokenValid: false,
-            success: false,
-            message: "Introduza um utilizador"
-        });
-    }
-
-    if(!note){
-        return res.json({
-            tokenValid: false,
-            success: false,
-            message: "Introduza uma nota"
-        });
-    }
-
-    jwt.verify(token, `${process.env.TOKEN_KEY}`, function(err: any, decoded: any) {
-        if (err) {
+        if (!token) {
             return res.json({
                 tokenValid: false,
                 success: false,
-                message: "Acesso expirado."
+                message: "Introduza um utilizador"
             });
         }
-    });
 
-    const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
-    
-    const user = tokenDecoded.user_id ;
-
-    const findUser = await User.findById({ _id: user });
-
-    if(findUser){
-        const findNote = await Notes.findOne({ _id: note, user: user });
-
-        if(findNote){
-            const update = await Notes.findOneAndUpdate(
-                { _id: note, user: user },
-                { 
-                    title: title, 
-                    content: content
-                },
-            );
-
-            if(update){
-                return res.json({
-                    success: true,
-                    message: "Nota atualizada com sucesso."
-                });
-            }else{
-                return res.json({
-                    success: false,
-                    message: "Não foi possível atualizar a nota."
-                });
-            }
-        }else{
+        if (!note) {
             return res.json({
+                tokenValid: false,
                 success: false,
-                message: "Não encontramos a nota."
+                message: "Introduza uma nota"
             });
         }
 
-    }else{
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function (err: any, decoded: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Acesso expirado."
+                });
+            } else {
+
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+                const user = tokenDecoded.user_id;
+
+                const findUser = await User.findById({ _id: user });
+
+                if (findUser) {
+                    const findNote = await Notes.findOne({ _id: note, user: user });
+
+                    if (findNote) {
+                        const update = await Notes.findOneAndUpdate(
+                            { _id: note, user: user },
+                            {
+                                title: title,
+                                content: content
+                            },
+                        );
+
+                        if (update) {
+                            return res.json({
+                                success: true,
+                                message: "Nota atualizada com sucesso."
+                            });
+                        } else {
+                            return res.json({
+                                success: false,
+                                message: "Não foi possível atualizar a nota."
+                            });
+                        }
+                    } else {
+                        return res.json({
+                            success: false,
+                            message: "Não encontramos a nota."
+                        });
+                    }
+
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Não encontramos o utilizador."
+                    });
+                }
+            }
+        });
+    }
+    catch {
         return res.json({
             success: false,
-            message: "Não encontramos o utilizador."
+            message: "Algo inesperado aconteceu."
         });
     }
 }

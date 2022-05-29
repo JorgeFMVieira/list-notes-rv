@@ -7,10 +7,11 @@ import { UpdateUser } from '../../../models/Auth/UpdateUser';
 import { GetUser } from '../../../models/Auth/GetUser';
 import { Get } from '../../../models/Auth/Get';
 import { useAuth } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordInfo = () => {
 
-    const { isUserLoggedIn, currentUser } = useAuth();
+    const { isUserLoggedIn, currentUser, setCurrentUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [showPassword3, setShowPassword3] = useState(false);
@@ -20,6 +21,7 @@ const PasswordInfo = () => {
     const [success, setSuccess] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
     const [user, setUser] = useState<GetUser>(new GetUser());
+    const navigate = useNavigate();
 
     const service: AuthService = new AuthService();
 
@@ -57,6 +59,11 @@ const PasswordInfo = () => {
         }
         service.GetUserInfo(data)
             .then(response => {
+                if(response.success === false){
+                    localStorage.removeItem('user');
+                    setCurrentUser(null);
+                    navigate("/");
+                }
                 setUser(response.obj);
             })
             .catch(err => {

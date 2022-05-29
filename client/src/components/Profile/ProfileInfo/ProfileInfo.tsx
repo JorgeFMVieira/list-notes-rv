@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AiOutlineWarning, AiOutlineCheck } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { Get } from '../../../models/Auth/Get';
 import { GetUser } from '../../../models/Auth/GetUser';
@@ -9,13 +10,14 @@ import styles from '../Info.module.css'
 
 const ProfileInfo = () => {
 
-    const { isUserLoggedIn, currentUser } = useAuth();
+    const { isUserLoggedIn, currentUser, setCurrentUser } = useAuth();
     const [user, setUser] = useState<GetUser>(new GetUser());
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [field, setField] = useState("");
     const [success, setSuccess] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
+    const navigate = useNavigate();
 
     const service: AuthService = new AuthService();
 
@@ -25,11 +27,11 @@ const ProfileInfo = () => {
         }
         await service.GetUserInfo(data)
             .then((response: any) => {
-                if(response.tokenValid == false){
-                    setError(true);
-                    setErrorMsg("Token is not valid");
+                if(response.success === false){
+                    localStorage.removeItem('user');
+                    setCurrentUser(null);
+                    navigate("/");
                 }
-                console.log(response);
                 setUser(response.obj);
             })
             .catch(err => {

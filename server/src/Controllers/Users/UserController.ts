@@ -117,7 +117,7 @@ const UserLogin = async function (req: any, res: any, next: any) {
                 { user_id: user._id, email },
                 `${process.env.TOKEN_KEY}`,
                 {
-                    expiresIn: "24h",
+                    expiresIn: "365d",
                 }
             );
 
@@ -248,7 +248,7 @@ const ResetPassword = async (req: any, res: any) => {
 
     const expires = tokenDecoded.date;
 
-    if(expires === null){
+    if (expires === null) {
         return res.json({
             tokenValid: false,
             success: false,
@@ -320,49 +320,49 @@ const GetUser = async (req: any, res: any) => {
     }
 
     try {
-        jwt.verify(token, `${process.env.TOKEN_KEY}`, function (err: any, decoded: any) {
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function (err: any, decoded: any) {
             if (err) {
                 return res.json({
                     tokenValid: false,
                     success: false,
-                    message: "Acesso expirado.",
+                    message: "Parece que o acesso já expirou.",
                     field: "all"
                 });
+            } else {
+                const currentDate = new Date();
+
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+                if (tokenDecoded) {
+                    const getUser = await User.findOne({ _id: tokenDecoded.user_id });
+                    if (getUser) {
+                        return res.json({
+                            success: true,
+                            obj: {
+                                id: getUser._id,
+                                first_name: getUser.first_name,
+                                last_name: getUser.last_name,
+                                email: getUser.email,
+                                token: token,
+                                expired: tokenDecoded.exp,
+                                currentDate: currentDate
+                            }
+                        });
+                    } else {
+                        return res.json({
+                            success: false,
+                            message: "Não conseguimos realizar essa operação.",
+                        });
+                    }
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Algo inesperado aconteceu. Tente novamente.",
+                        field: "all"
+                    });
+                }
             }
         });
-
-        const currentDate = new Date();
-
-        const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
-
-        if (tokenDecoded) {
-            const getUser = await User.findOne({ _id: tokenDecoded.user_id });
-            if (getUser) {
-                return res.json({
-                    success: true,
-                    obj: {
-                        id: getUser._id,
-                        first_name: getUser.first_name,
-                        last_name: getUser.last_name,
-                        email: getUser.email,
-                        token: token,
-                        expired: tokenDecoded.exp,
-                        currentDate: currentDate
-                    }
-                });
-            } else {
-                return res.json({
-                    success: false,
-                    message: "Não conseguimos realizar essa operação.",
-                });
-            }
-        } else {
-            return res.json({
-                success: false,
-                message: "Algo inesperado aconteceu. Tente novamente.",
-                field: "all"
-            });
-        }
     }
     catch (e) {
         res.json({

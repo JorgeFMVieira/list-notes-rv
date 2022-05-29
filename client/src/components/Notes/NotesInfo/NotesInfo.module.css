@@ -1,0 +1,110 @@
+.noteInfo{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #333333;
+    padding: 10px 15px;
+}
+
+.noteMain{
+    position: relative;
+    height: 100%;
+}
+
+.noteHeader{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 1.2em;
+    border-bottom: 1px solid #979797;
+}
+
+.noteHeaderIcon{
+    margin-left: auto;
+    cursor: pointer;
+    transition: 0.3s all ease-in-out;
+}
+
+.noteHeaderIcon:hover{
+    color: #FA6163;
+}
+
+.noteContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 3%;
+}
+
+.noteItem{
+    width: 100%;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.noteContent .noteItem:last-child{
+    margin-bottom: 50px;
+}
+
+.noteItem input,
+.noteItem textarea{
+    width: 100%;
+    padding: 5px 10px;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    background-color: #505050;
+    color: #FFFFFF;
+    font-size: 1.2em;
+}
+
+.noteItem textarea{
+    resize: vertical;
+    min-height: 50px;
+    height: 600px;
+}
+
+.noteButtons{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px 15px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.noteButtons .noteBtn{
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.noteButtons button{
+    width: 150px;
+    padding: 10px 10px;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.2em;
+    background-color: #FA6163;
+    color: #b4b4b4;
+    cursor: pointer;
+    transition: 0.3s all ease-in-out;
+}
+
+.noteButtons button:hover{
+    color: #FFFFFF;
+}
+
+.noteButtons .noteBtnCancel{
+    margin-left: 20px;
+    background-color: #202020;
+}
+
+.noteButtons .noteBtnCancel:hover{
+    color: #FA6163;
+}

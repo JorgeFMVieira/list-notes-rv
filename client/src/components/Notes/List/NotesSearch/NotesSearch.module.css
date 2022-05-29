@@ -1,0 +1,32 @@
+.notesListSearch{
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+}
+
+.notesListSearch input{
+    width: 100%;
+    padding: 5px 10px;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    background-color: #505050;
+    color: #FFFFFF;
+    font-size: 1.2em;
+}
+
+.notesListSearchIcon{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    color: #FFFFFF;
+    font-size: 1.2em;
+    transition: 0.3s all ease-in-out;
+    cursor: pointer;
+}
+
+.notesListSearchIcon:hover{
+    color: #FA6163;
+    font-weight: bold;
+}
