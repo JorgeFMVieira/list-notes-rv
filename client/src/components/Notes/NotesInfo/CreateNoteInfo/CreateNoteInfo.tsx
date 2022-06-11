@@ -46,20 +46,20 @@ const CreateNoteInfo = (props: any) => {
                 <>
                     <div className={styles.noteHeader}>
                         <span>Criar Nota</span>
-                        <span className={styles.noteHeaderIcon}><AiOutlineClose onClick={() => props.setCreateOpen(false)} /></span>
+                        <span className={styles.noteHeaderIcon}><AiOutlineClose onClick={() => { props.setCreateOpen(false); props.setCurrentNote("") }} /></span>
                     </div>
                     <div className={styles.noteContent}>
                         <div className={styles.noteItem}>
                             <span>Título: </span>
                             <input type="text" onChange={(e) => setNote({ ...note, title: e.target.value })} placeholder="Título" />
                         </div>
-                        <div className={styles.noteItem}>
+                        <div className={`${styles.noteItem} ${styles.noteItemDesc}`}>
                             <span>Descrição: </span>
                             <textarea placeholder='Descrição' defaultValue={note.content} onChange={(e) => setNote({ ...note, content: e.target.value })}>
 
                             </textarea>
                         </div>
-                        <div className={styles.noteItem}></div>
+
                     </div>
                     <div className={styles.noteButtons}>
                         {loadingBtn === true ?

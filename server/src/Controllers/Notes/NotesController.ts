@@ -48,7 +48,8 @@ const CreateNote = async (req: any, res: any) => {
                     const newNote = new Notes({
                         title,
                         content,
-                        user
+                        user,
+                        createdAt: Date.now()
                     });
 
                     try {
@@ -82,7 +83,7 @@ const CreateNote = async (req: any, res: any) => {
 
 const ListNotes = async (req: any, res: any) => {
     try {
-        const { token, search, currentPage } = req.body;
+        const { token, search } = req.body;
 
         if (!token) {
             return res.json({
@@ -107,35 +108,27 @@ const ListNotes = async (req: any, res: any) => {
                 const findUser = await User.findById({ _id: user });
 
                 if (findUser) {
-                    const page = currentPage ? currentPage : 1;
-
-                    const limitItems = 30;
-                    var totalPages = 0;
-                    var countPage = 0;
                     var notas = [];
 
                     // Find Notes and count total items
-                    const [notes, count] = await Promise.all([
-                        Notes.find({ user: user }).skip((page - 1) * limitItems).limit(limitItems),
+                    const [notes] = await Promise.all([
+                        Notes.find({ user: user }),
                         Notes.countDocuments({ user: user }),
                     ]);
 
                     if (search) {
-                        const [notes, count] = await Promise.all([
-                            Notes.find({ user: user, $text: { $search: search } }).skip((page - 1) * limitItems).limit(limitItems),
-                            Notes.countDocuments({ user: user, $text: { $search: search } }),
+                        const [notes] = await Promise.all([
+                            Notes.find({ user: user, title: { $regex: search, $options: "i" } }),
+                            Notes.countDocuments({ user: user, title: { $regex: search, $options: "i" } }),
                         ]);
-                        totalPages = Math.ceil(count / limitItems);
                         notas = notes;
                     } else {
-                        totalPages = Math.ceil(count / limitItems);
                         notas = notes;
                     }
 
                     return res.json({
                         success: true,
-                        obj: notas,
-                        totalPages: totalPages
+                        obj: notas
                     });
 
                 } else {
@@ -306,7 +299,7 @@ const UpdateNotes = async (req: any, res: any) => {
     catch {
         return res.json({
             success: false,
-            message: "Algo inesperado aconteceu."
+            message: "Ocorreu um erro ao atualizar a nota. Tente novamente."
         });
     }
 }

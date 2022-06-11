@@ -21,13 +21,13 @@ const Notes = () => {
                 <div className={styles.notesListHeader}>
                     <span>Notas</span>
                 </div>
-                <CreateNotes setCreateOpen={setCreateOpen} createOpen={createOpen} setEditNote={setEditNote} />
+                <CreateNotes setCreateOpen={setCreateOpen} createOpen={createOpen} setEditNote={setEditNote} setCurrentNote={setCurrentNote} />
                 <NotesSearch search={search} setSearch={setSearch} />
-                <NotesTable changed={changed} setEditNote={setEditNote} editNote={editNote} setCreateOpen={setCreateOpen} currentNote={currentNote} setCurrentNote={setCurrentNote} search={search} />
+                <NotesTable setChanged={setChanged} changed={changed} setEditNote={setEditNote} editNote={editNote} createOpen={createOpen} setCreateOpen={setCreateOpen} currentNote={currentNote} setCurrentNote={setCurrentNote} search={search} />
             </div>
             {createOpen || editNote ?
                 <div className={styles.notesInfo}>
-                    <NotesInfo setChanged={setChanged} changed={changed} currentNote={currentNote} editNote={editNote} setEditNote={setEditNote} createOpen={createOpen} setCreateOpen={setCreateOpen} />
+                    <NotesInfo setChanged={setChanged} changed={changed} currentNote={currentNote} setCurrentNote={setCurrentNote} editNote={editNote} setEditNote={setEditNote} createOpen={createOpen} setCreateOpen={setCreateOpen} />
                 </div>
                 : null}
         </div>

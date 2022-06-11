@@ -57,7 +57,7 @@ const DetailsNoteInfo = (props: any) => {
                 <>
                     <div className={styles.noteHeader}>
                         <span>Editar - {noteTitle}</span>
-                        <span className={styles.noteHeaderIcon}><AiOutlineClose onClick={() => props.setEditNote(false)} /></span>
+                        <span className={styles.noteHeaderIcon}><AiOutlineClose onClick={() => {props.setEditNote(false);props.setCurrentNote("")}} /></span>
                     </div>
                     <div className={styles.noteContent}>
                         <div className={styles.noteItem}>

@@ -5,7 +5,7 @@ const CreateNotes = (props: any) => {
 
     return (
         <div className={styles.createNote}>
-            <button onClick={() => {props.createOpen === true ? props.setCreateOpen(false) : props.setCreateOpen(true); props.setEditNote(false)}}>Criar</button>
+            <button onClick={() => {props.createOpen === true ? props.setCreateOpen(false) : props.setCreateOpen(true); props.setEditNote(false); props.setCurrentNote("")}}>Criar</button>
         </div>
     )
 }

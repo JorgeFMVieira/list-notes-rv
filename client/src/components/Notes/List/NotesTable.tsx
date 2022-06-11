@@ -13,9 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const NotesTable = (props: any) => {
     const { isUserLoggedIn, currentUser, setCurrentUser } = useAuth();
     const service: NotesService = new NotesService();
-    const [currentPage, setCurrentPage] = useState(1);
     const [notes, setNotes] = useState<GetAllNotes[]>([]);
-    const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -23,18 +21,18 @@ const NotesTable = (props: any) => {
         var data: ListNotes = {
             token: currentUser?.token,
             search: props.search,
-            currentPage: currentPage
         }
         setLoading(true);
         await service.ListNotes(data)
             .then((response: any) => {
-                if(response.tokenValid === false){
+                if (response.tokenValid === false) {
                     localStorage.removeItem('user');
                     setCurrentUser(null);
                     navigate("/");
+                    return;
                 }
+                props.setChanged(false);
                 setNotes(response.obj);
-                setTotalPages(response.totalPages);
                 setLoading(false);
             })
             .catch(error => {
@@ -43,56 +41,46 @@ const NotesTable = (props: any) => {
             });
     }
 
-    const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
-        setCurrentPage(page);
-    };
+    const convertDate = (e: string, option: string) => {
+        var date = e;
+
+        if(option === "dateToString"){
+            var onlyDate = date.split("T");
+            date = onlyDate[0];
+            const [year, month, day] = date.split("-");
+            date = day + "/" + month + "/" + year;
+        }
+
+        return date;
+    }
 
     useEffect(() => {
         GetNotes();
-    }, [props.search, currentPage, props.changed]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [props.search]);
+    }, [props.search, props.changed]);
 
     return (
-        <div>
+        <div className={styles.tableScroll}>
             {loading === true ?
                 <Box style={{ width: '100%', marginTop: '25px' }}>
                     <LinearProgress style={{ backgroundColor: '#202020', color: 'red' }} />
                 </Box>
                 :
-                <>
+                <div>
                     {notes.length === 0 ?
                         props.search !== "" ?
                             <p className={styles.notesNotFound}>Não foram encontras notas.</p>
                             : <p className={styles.notesNotFound}>Parece que não possui nenhuma nota. Crie uma já.</p>
                         :
-                        <>
-                            <div className={styles.notesListAllNotes}>
-                                {notes.map((note: GetAllNotes) => (
-                                    <div key={note._id} className={styles.AllNotesItem} onClick={() => {props.setCurrentNote(note._id); props.editNote === true && props.currentNote === note._id ? props.setEditNote(false) : props.setEditNote(true); props.setCreateOpen(false)}}>
-                                        {note.title}
-                                    </div>
-                                ))}
-                            </div>
-                            <div className={styles.notesListPagination}>
-                                <Pagination
-                                    className={styles.pagination}
-                                    count={totalPages}
-                                    page={currentPage}
-                                    siblingCount={1}
-                                    boundaryCount={1}
-                                    color="standard"
-                                    shape="rounded"
-                                    onChange={handlePageChange}
-                                    showFirstButton
-                                    showLastButton
-                                />
-                            </div>
-                        </>
+                        <div className={styles.notesListAllNotes}>
+                            {notes.map((note: GetAllNotes) => (
+                                <div key={note._id} className={`${styles.AllNotesItem} ${props.currentNote === note._id && props.createOpen === false ? styles.SelectedNote : null}`} onClick={() => { props.setCurrentNote(note._id); props.editNote === true && props.currentNote === note._id ? props.setEditNote(false) : props.setEditNote(true); props.setCreateOpen(false); props.editNote === true && props.currentNote === note._id && props.setCurrentNote("")}}>
+                                    <span className={styles.noteTitle}>{note.title}</span>
+                                    <span className={styles.noteDate}>{convertDate(note.createdAt.toString(), "dateToString")}</span>
+                                </div>
+                            ))}
+                        </div>
                     }
-                </>
+                </div>
             }
         </div>
     )
