@@ -8,10 +8,12 @@ import '../../../pages/Notes/Pagination.css';
 import { Box, LinearProgress } from '@material-ui/core';
 import styles from './NotesTable.module.css';
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
+import { FaRegTrashAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import NotesDelete from './NotesDelete/NotesDelete';
 
 const NotesTable = (props: any) => {
-    const { isUserLoggedIn, currentUser, setCurrentUser } = useAuth();
+    const { currentUser, setCurrentUser } = useAuth();
     const service: NotesService = new NotesService();
     const [notes, setNotes] = useState<GetAllNotes[]>([]);
     const [loading, setLoading] = useState(false);
@@ -44,7 +46,7 @@ const NotesTable = (props: any) => {
     const convertDate = (e: string, option: string) => {
         var date = e;
 
-        if(option === "dateToString"){
+        if (option === "dateToString") {
             var onlyDate = date.split("T");
             date = onlyDate[0];
             const [year, month, day] = date.split("-");
@@ -73,9 +75,12 @@ const NotesTable = (props: any) => {
                         :
                         <div className={styles.notesListAllNotes}>
                             {notes.map((note: GetAllNotes) => (
-                                <div key={note._id} className={`${styles.AllNotesItem} ${props.currentNote === note._id && props.createOpen === false ? styles.SelectedNote : null}`} onClick={() => { props.setCurrentNote(note._id); props.editNote === true && props.currentNote === note._id ? props.setEditNote(false) : props.setEditNote(true); props.setCreateOpen(false); props.editNote === true && props.currentNote === note._id && props.setCurrentNote("")}}>
-                                    <span className={styles.noteTitle}>{note.title}</span>
-                                    <span className={styles.noteDate}>{convertDate(note.createdAt.toString(), "dateToString")}</span>
+                                <div key={note._id} className={`${styles.AllNotesItem} ${props.currentNote === note._id && props.createOpen === false ? styles.SelectedNote : null}`}>
+                                    <div className={styles.NotesItemContainer} onClick={() => { props.setCurrentNote(note._id); props.editNote === true && props.currentNote === note._id ? props.setEditNote(false) : props.setEditNote(true); props.setCreateOpen(false); props.editNote === true && props.currentNote === note._id && props.setCurrentNote("") }}>
+                                        <span className={styles.noteTitle}>{note.title}</span>
+                                        <span className={styles.noteDate}>{convertDate(note.createdAt.toString(), "dateToString")}</span>
+                                    </div>
+                                    <span className={styles.noteDelete} onClick={() => { props.setCurrentNote(note._id); props.setDeleteOpen(true); props.setCurrentNoteTitle(note.title) }}><FaRegTrashAlt /></span>
                                 </div>
                             ))}
                         </div>

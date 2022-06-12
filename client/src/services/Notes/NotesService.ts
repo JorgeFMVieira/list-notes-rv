@@ -1,6 +1,8 @@
 import { MessagingHelper } from "../../helpers/MessagingHelper";
 import { CreateNote } from "../../models/Notes/CreateNote";
+import { DeleteNote } from "../../models/Notes/DeleteNote";
 import { DetailsNote } from "../../models/Notes/DetailsNote";
+import { EditNote } from "../../models/Notes/EditNote";
 import { GetAllNotes } from "../../models/Notes/GetAllNotes";
 import { ListNotes } from "../../models/Notes/ListNotes";
 import { Pagination } from "../../models/Pagination";
@@ -19,6 +21,16 @@ export class NotesService {
 
     CreateNote = async (data: CreateNote) : Promise<MessagingHelper<CreateNote>> => {
         const response = await Api.post("/createNote", { ...data });
+        return response.data;
+    }
+
+    EditNote = async (data: EditNote): Promise<MessagingHelper<boolean>> => {
+        const response = await Api.post("/updateNotes", { ...data });
+        return response.data;
+    }
+
+    DeleteNote = async (data: DeleteNote): Promise<MessagingHelper<boolean>> => {
+        const response = await Api.post("/deleteNote", { ...data });
         return response.data;
     }
 }

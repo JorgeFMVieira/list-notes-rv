@@ -34,4 +34,6 @@ router.post("/detailsNotes", NotesController.DetailsNote);
 
 router.post("/updateNotes", NotesController.UpdateNotes);
 
+router.post("/deleteNote", NotesController.DeleteNote);
+
 export default router;

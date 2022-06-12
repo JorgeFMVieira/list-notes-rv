@@ -12,6 +12,7 @@
 }
 
 .navbar > .navLogo{
+    cursor: pointer;
     font-size: 21px;
     margin: 15px;
     color: #FA6163;

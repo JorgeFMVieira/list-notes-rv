@@ -7,9 +7,9 @@ const notesSchema = new mongoose.Schema({
     createdAt: {type: Date, default: Date.now},
 });
 
+// Pesquisas
 notesSchema.index({
-    title: "text",
-    createdAt: "text"
+    title: "text"
 });
 
 const Notes = mongoose.model("notes", notesSchema);

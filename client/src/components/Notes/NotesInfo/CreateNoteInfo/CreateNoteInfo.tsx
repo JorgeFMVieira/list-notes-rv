@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
 import { useAuth } from '../../../../context/AuthContext';
 import { DetailsNote } from '../../../../models/Notes/DetailsNote';
 import { NotesService } from '../../../../services/Notes/NotesService';
@@ -14,6 +14,8 @@ const CreateNoteInfo = (props: any) => {
     const [note, setNote] = useState<DetailsNote>(new DetailsNote());
     const [loading, setLoading] = useState(true);
     const [loadingBtn, setLoadingBtn] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
     const CreateNote = async () => {
         var data: CreateNote = {
@@ -22,6 +24,16 @@ const CreateNoteInfo = (props: any) => {
         };
         await service.CreateNote(data)
             .then(response => {
+                if (response.success === false) {
+                    setError(true);
+                    setErrorMsg(response.message);
+                    setLoadingBtn(false);
+                    setLoading(false);
+                    setTimeout(() => {
+                        setError(false);
+                    }, 5000);
+                    return;
+                }
                 props.setChanged(true);
                 props.setCreateOpen(false);
             })
@@ -59,7 +71,11 @@ const CreateNoteInfo = (props: any) => {
 
                             </textarea>
                         </div>
-
+                        {error === true ?
+                            <div className={`${styles.noteItem} ${styles.noteError}`}>
+                                <p><AiOutlineWarning style={{ fontSize: '1.5em' }} />&nbsp;{errorMsg}</p>
+                            </div>
+                            : null}
                     </div>
                     <div className={styles.noteButtons}>
                         {loadingBtn === true ?

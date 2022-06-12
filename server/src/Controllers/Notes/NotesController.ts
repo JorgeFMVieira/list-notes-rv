@@ -24,7 +24,7 @@ const CreateNote = async (req: any, res: any) => {
         if (!token) {
             return res.json({
                 success: false,
-                message: "Introduza um utilizador"
+                message: "Introduza um utilizador."
             });
         }
 
@@ -112,14 +112,14 @@ const ListNotes = async (req: any, res: any) => {
 
                     // Find Notes and count total items
                     const [notes] = await Promise.all([
-                        Notes.find({ user: user }),
-                        Notes.countDocuments({ user: user }),
+                        Notes.find({ user: user }).sort({ createdAt: -1}),
+                        Notes.countDocuments({ user: user }).sort({ createdAt: -1}),
                     ]);
 
                     if (search) {
                         const [notes] = await Promise.all([
-                            Notes.find({ user: user, title: { $regex: search, $options: "i" } }),
-                            Notes.countDocuments({ user: user, title: { $regex: search, $options: "i" } }),
+                            Notes.find({ user: user, title: { $regex: search.trim(), $options: "i" } }).sort({ createdAt: -1}),
+                            Notes.countDocuments({ user: user, title: { $regex: search.trim(), $options: "i" } }).sort({ createdAt: -1}),
                         ]);
                         notas = notes;
                     } else {
@@ -304,9 +304,87 @@ const UpdateNotes = async (req: any, res: any) => {
     }
 }
 
+const DeleteNote = async (req: any, res: any) => {
+    try{
+        const { note, token } = req.body;
+
+        if (!token) {
+            return res.json({
+                tokenValid: false,
+                success: false,
+                message: "Introduza um utilizador"
+            });
+        }
+
+        if (!note) {
+            return res.json({
+                success: false,
+                message: "Introduza uma nota"
+            });
+        }
+
+        jwt.verify(token, `${process.env.TOKEN_KEY}`, async function (err: any, decoded: any) {
+            if (err) {
+                return res.json({
+                    tokenValid: false,
+                    success: false,
+                    message: "Acesso expirado."
+                });
+            } else {
+
+                const tokenDecoded = jwtSimple.decode(token, process.env.TOKEN_KEY as string);
+
+                const user = tokenDecoded.user_id;
+
+                const findUser = await User.findById({ _id: user });
+
+                if (findUser) {
+                    const findNote = await Notes.findOne({ _id: note, user: user });
+
+                    if (findNote) {
+                        const deleteNote = await Notes.deleteOne(
+                            { _id: note },
+                        );
+
+                        if (deleteNote) {
+                            return res.json({
+                                success: true,
+                                message: "A nota foi eliminada com sucesso."
+                            });
+                        } else {
+                            return res.json({
+                                success: false,
+                                message: "Não foi possível eliminar a nota."
+                            });
+                        }
+                    } else {
+                        return res.json({
+                            success: false,
+                            message: "Não encontramos a nota."
+                        });
+                    }
+
+                } else {
+                    return res.json({
+                        success: false,
+                        message: "Não encontramos o utilizador."
+                    });
+                }
+            }
+        }); 
+    }
+    catch{
+        return res.json({
+            success: false,
+            message: "Ocorreu um erro ao eliminar a nota. Tente novamente."
+        });
+    }
+}
+
 export default {
     CreateNote,
     ListNotes,
     UpdateNotes,
     DetailsNote,
+    DeleteNote,
 }

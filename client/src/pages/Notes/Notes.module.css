@@ -1,3 +1,7 @@
+.notesContainer{
+    height: calc(100% - 60px);
+}
+
 .notes{
     padding: 5%;
     color: #FFFFFF;

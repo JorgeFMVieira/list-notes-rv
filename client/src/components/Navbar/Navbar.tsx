@@ -78,7 +78,7 @@ const Navbar = () => {
 
     return (
         <div className={styles.navbar}>
-            <span className={styles.navLogo}>Notes RV</span>
+            <span className={styles.navLogo} onClick={() => navigate("/")}>Notes RV</span>
             <div className={`${styles.navItems} ${isOpen && styles.open}`}>
                 {currentUser !== null && isUserLoggedIn ?
                     <>

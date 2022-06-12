@@ -22,6 +22,7 @@
     transition: 0.3s all ease-in-out;
     margin: 0 0 20px 0;
     border: 1px solid #505050;
+    transition: 0.3s all ease-in-out;
 }
 
 .SelectedNote{
@@ -30,6 +31,11 @@
 
 .AllNotesItem:hover{
     background-color: #272727;
+}
+
+.NotesItemContainer{
+    width: 100%;
+    height: 100%;
 }
 
 .noteDate{
@@ -51,4 +57,23 @@
 
 .notesNotFound{
     margin-top: 15px;
+}
+
+.noteDelete{
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+    font-size: 1.3em;
+    visibility: hidden;
+    transition: 0.3s all ease-in-out;
+    z-index: 999;
+}
+
+.AllNotesItem:hover .noteDelete{
+    transition: 0.3s all ease-in-out;
+    visibility: visible;
+}
+
+.noteDelete:hover{
+    color: #FA6163;
 }

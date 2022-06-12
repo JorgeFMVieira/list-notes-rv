@@ -8,6 +8,27 @@
     overflow-y: auto;
 }
 
+.noteInfo ::-webkit-scrollbar {
+    width: 15px;
+}
+  
+  /* Track */
+.noteInfo ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #505050; 
+    border-radius: 10px;
+}
+   
+  /* Handle */
+.noteInfo ::-webkit-scrollbar-thumb {
+    background: #272727; 
+    border-radius: 10px;
+}
+  
+  /* Handle on hover */
+.noteInfo ::-webkit-scrollbar-thumb:hover {
+    background: #242424; 
+}
+
 .noteMain{
     display: flex;
     flex-direction: column;
@@ -41,27 +62,6 @@
     overflow-y: auto;
 }
 
-.noteContent ::-webkit-scrollbar {
-    width: 15px;
-}
-  
-  /* Track */
-.noteContent ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px #505050; 
-    border-radius: 10px;
-}
-   
-  /* Handle */
-.noteContent ::-webkit-scrollbar-thumb {
-    background: #505050; 
-    border-radius: 10px;
-}
-  
-  /* Handle on hover */
-.noteContent ::-webkit-scrollbar-thumb:hover {
-    background: #242424; 
-}
-
 .noteItem{
     width: 100%;
     padding: 10px 15px;
@@ -86,13 +86,15 @@
 }
 
 .noteItem textarea{
-    resize: vertical;
+    cursor: default;
+    resize: none;
     height: 100%;
 }
 
 .noteButtons{
     width: 100%;
-    padding: 10px 35px;
+    display: flex;
+    padding: 10px 15px;
     margin-top: auto;
 }
 
@@ -128,4 +130,18 @@
 
 .noteButtons .noteBtnCancel:hover{
     color: #FA6163;
+}
+
+.noteError{
+    color: #FA6163;
+    text-align: center;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.noteError p{
+    display: flex;
+    align-items: center;
 }

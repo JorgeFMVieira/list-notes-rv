@@ -44,7 +44,7 @@ const NotesInfo = (props: any) => {
         <div className={styles.noteInfo}>
             {props.editNote ?
                 <DetailsNoteInfo changed={props.changed} setChanged={props.setChanged} currentNote={props.currentNote} setCurrentNote={props.setCurrentNote} setEditNote={props.setEditNote} />
-            : <CreateNoteInfo changed={props.changed} setChanged={props.setChanged} setCreateOpen={props.setCreateOpen} createOpen={props.createOpen} />}
+            : <CreateNoteInfo changed={props.changed} setChanged={props.setChanged} setCreateOpen={props.setCreateOpen} createOpen={props.createOpen} setCurrentNote={props.setCurrentNote} />}
         </div>
     )
 }
